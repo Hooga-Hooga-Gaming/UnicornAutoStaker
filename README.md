@@ -1,4 +1,4 @@
-# Unicorn Darkforest Auto Stake + Claim
+# CryptoUnicorns Darkforest Auto Stake & Unstake Script
 
 Official site: https://darkforest.cryptounicorns.fun/
 

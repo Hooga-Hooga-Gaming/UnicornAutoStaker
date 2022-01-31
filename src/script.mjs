@@ -6,22 +6,20 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const provider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/", 137);
-const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
 
 // https://polygonscan.com/address/0x8d528e98a69fe27b11bb02ac264516c4818c3942
 const DARK_FOREST_CONTRACT = "0x8d528e98a69fe27b11bb02ac264516c4818c3942";
 // https://polygonscan.com/token/0xdc0479cc5bba033b3e7de9f178607150b3abce1f
 const UNICORN_NFT_CONTRACT = "0xdc0479cc5bba033b3e7de9f178607150b3abce1f";
-// dumb delay to make sure tx go through
-const DELAY_TIMER = 10 * 1000;
 
 
 async function main() {
-    const DarkForestContract = new ethers.Contract(DARK_FOREST_CONTRACT, DarkForestAbiJson, provider);
-    const UnicornNFTContract = new ethers.Contract(UNICORN_NFT_CONTRACT, ERC721AbiJson, provider);
-    const unicornsNFT = [];
-    const address = signer.address;
+    const DarkForestContract = new ethers.Contract(DARK_FOREST_CONTRACT, DarkForestAbiJson, wallet);
+    const UnicornNFTContract = new ethers.Contract(UNICORN_NFT_CONTRACT, ERC721AbiJson, wallet);
+    const address = wallet.address;
+
     console.log("Your address: ", address);
 
 
@@ -36,11 +34,15 @@ async function main() {
             const canUnstake = timeNow > unstakedAt;
 
             if (canUnstake) {
+                console.log(`Unstaking Unicorn $${tokenId}...`)
                 // Unstake
-                const DarkForestContractWithSigner = DarkForestContract.connect(signer);
-                const tx = await DarkForestContractWithSigner.exitForest(tokenId);
-                // Delay 4s every tx
-                await sleep(DELAY_TIMER);
+                try {
+                    const tx = await DarkForestContract.exitForest(tokenId);
+                    console.log(`https://polygonscan.com/tx/${tx.hash}`)
+                    await tx.wait();
+                } catch (err) {
+                    console.error(err);
+                }
             }
         }
     } else {
@@ -51,25 +53,23 @@ async function main() {
         }
         for (let i = 0; i < balanceOf; i++) {
             const tokenId = (await UnicornNFTContract.tokenOfOwnerByIndex(address, i)).toNumber()
-            // Stake
-            const UnicornNFTContractWithSigner = UnicornNFTContract.connect(signer);
-            const tx = await UnicornNFTContractWithSigner.safeTransferFrom(
-                address, // from
-                DARK_FOREST_CONTRACT, // to
-                tokenId, // tokenId
-                "" // _data
-            );
-            // Delay 4s every tx
-            await sleep(DELAY_TIMER);
+            console.log(`Staking Unicorn $${tokenId}...`)
+            try {
+                // Stake
+                const tx = await UnicornNFTContract.safeTransferFrom(
+                    address, // from
+                    DARK_FOREST_CONTRACT, // to
+                    tokenId, // tokenId
+                );
+                console.log(`https://polygonscan.com/tx/${tx.hash}`)
+                await tx.wait();
+            } catch (err) {
+                console.error(err);
+            }
         }
     }
 }
 
-// sleep time expects milliseconds
-function sleep (time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-  }
-  
 
 main()
     .then(() => {
