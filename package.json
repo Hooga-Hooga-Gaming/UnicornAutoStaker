@@ -1,0 +1,16 @@
+{
+  "name": "cryptounicorns",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --experimental-json-modules src/script.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^14.3.2",
+    "ethers": "^5.5.3"
+  }
+}
