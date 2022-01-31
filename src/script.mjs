@@ -13,6 +13,8 @@ const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 const DARK_FOREST_CONTRACT = "0x8d528e98a69fe27b11bb02ac264516c4818c3942";
 // https://polygonscan.com/token/0xdc0479cc5bba033b3e7de9f178607150b3abce1f
 const UNICORN_NFT_CONTRACT = "0xdc0479cc5bba033b3e7de9f178607150b3abce1f";
+// dumb delay to make sure tx go through
+const DELAY_TIMER = 10 * 1000;
 
 
 async function main() {
@@ -37,6 +39,8 @@ async function main() {
                 // Unstake
                 const DarkForestContractWithSigner = DarkForestContract.connect(signer);
                 const tx = await DarkForestContractWithSigner.exitForest(tokenId);
+                // Delay 4s every tx
+                await sleep(DELAY_TIMER);
             }
         }
     } else {
@@ -55,9 +59,17 @@ async function main() {
                 tokenId, // tokenId
                 "" // _data
             );
+            // Delay 4s every tx
+            await sleep(DELAY_TIMER);
         }
     }
 }
+
+// sleep time expects milliseconds
+function sleep (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
+  
 
 main()
     .then(() => {
