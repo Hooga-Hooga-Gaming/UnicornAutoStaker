@@ -9,7 +9,8 @@ Official site: https://darkforest.cryptounicorns.fun/
 - Detect all Unicorns in the wallet and stake it
 
 ## Improvement
-- Allow replacement of tx since polygon are super unstable in terms of gas price
+- Allow replacement of tx since polygon are super unstable in terms of gas price.
+- Allow the script to determine the current gas price and +15% on top of the current gas to ensure tx dont get block.
 - The script only work in a mode, if users got staked unicorn will unstaked all that is available; if user dont have staked unicorn, it will proceed to stake every single unicorn in the wallet.
 - Make it into a cron job.
 
