@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import DarkForestAbiJson from "./dark_forest_abi.json";
 import ERC721AbiJson from "./erc_721_abi.json";
 import dotenv from "dotenv";
+import config from "./config.mjs";
 
 dotenv.config();
 
@@ -13,7 +14,6 @@ const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 const DARK_FOREST_CONTRACT = "0x8d528e98a69fe27b11bb02ac264516c4818c3942";
 // https://polygonscan.com/token/0xdc0479cc5bba033b3e7de9f178607150b3abce1f
 const UNICORN_NFT_CONTRACT = "0xdc0479cc5bba033b3e7de9f178607150b3abce1f";
-
 
 async function main() {
     const DarkForestContract = new ethers.Contract(DARK_FOREST_CONTRACT, DarkForestAbiJson, wallet);
@@ -37,7 +37,9 @@ async function main() {
                 console.log(`Unstaking Unicorn $${tokenId}...`)
                 // Unstake
                 try {
-                    const tx = await DarkForestContract.exitForest(tokenId);
+                    const tx = await DarkForestContract.exitForest(tokenId,
+                        { gasPrice: ethers.utils.parseUnits(String(config.GAS_PRICE), 'gwei') }
+                    );
                     console.log(`https://polygonscan.com/tx/${tx.hash}`)
                     await tx.wait();
                 } catch (err) {
@@ -60,6 +62,7 @@ async function main() {
                     address, // from
                     DARK_FOREST_CONTRACT, // to
                     tokenId, // tokenId
+                    {gasPrice: ethers.utils.parseUnits(String(config.GAS_PRICE), 'gwei')}
                 );
                 console.log(`https://polygonscan.com/tx/${tx.hash}`)
                 await tx.wait();
