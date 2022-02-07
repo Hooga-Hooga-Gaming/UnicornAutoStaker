@@ -34,7 +34,7 @@ async function main() {
             const canUnstake = timeNow > unstakedAt;
 
             if (canUnstake) {
-                console.log(`Unstaking Unicorn $${tokenId}...`)
+                console.log(`Unstaking Unicorn #${tokenId}...`)
                 // Unstake
                 try {
                     const tx = await DarkForestContract.exitForest(tokenId,
@@ -55,7 +55,7 @@ async function main() {
         }
         for (let i = 0; i < balanceOf; i++) {
             const tokenId = (await UnicornNFTContract.tokenOfOwnerByIndex(address, i)).toNumber()
-            console.log(`Staking Unicorn $${tokenId}...`)
+            console.log(`Staking Unicorn #${tokenId}...`)
             try {
                 // Stake
                 const tx = await UnicornNFTContract.safeTransferFrom(
