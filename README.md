@@ -51,5 +51,16 @@ Scenario 2:
 
 When you got 5 staked unicorns, run `npm run start`, it will unstake all your unicorns, same as above, run `npm run start` again to stake all the unicorns again.
 
+## Other script
+
+To get total unicorns being staked in DarkForest:
+
+```sh
+npm run totalUnicorns
+
+# Export the log
+npm run totalUnicorns >> result.txt
+```
+
 ## About this script
 Script created by [Johnson Lai](https://twitter.com/jlwhoo7) under MIT License
