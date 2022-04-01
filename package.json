@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "cron": "node --experimental-json-modules src/cron.mjs",
     "start": "node --experimental-json-modules src/script.mjs",
     "totalUnicorns": "node --experimental-json-modules src/totalUnicorns.mjs"
   },
@@ -12,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^14.3.2",
-    "ethers": "^5.5.3"
+    "ethers": "^5.5.3",
+    "node-cron": "^3.0.0"
   }
 }
