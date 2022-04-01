@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import DarkForestAbiJson from "./dark_forest_abi.json";
-import ERC721AbiJson from "./erc_721_abi.json";
+import DarkForestAbiJson from "./dark_forest_abi.json" assert {type: "json"};
+import ERC721AbiJson from "./erc_721_abi.json" assert {type: "json"};
 import dotenv from "dotenv";
 import config from "./config.mjs";
 
